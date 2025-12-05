@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora MEI Pro - Brayan Contabilidade</title>
+    
+    <!-- Fontes Profissionais -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CDNs -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Estilos Locais -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/contabilidade.css">
+    
+    <style>
+        /* Estilos inline críticos */
+        :root {
+            --primary: #1e40af; /* Azul profissional */
+            --primary-dark: #1e3a8a;
+            --primary-light: #3b82f6;
+            --secondary: #059669; /* Verde contábil */
+            --accent: #7c3aed;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-800: #1f2937;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f0f7ff 0%, #e6f7ff 100%);
+        }
+        
+        .font-heading {
+            font-family: 'Source Sans Pro', 'Inter', sans-serif;
+        }
+        
+        /* Design Corporativo */
+        .corporate-card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s ease;
+        }
+        
+        .corporate-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+        }
+        
+        .corporate-badge {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.025em;
+        }
+        
+        .corporate-tab {
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+        
+        .corporate-tab.active {
+            border-bottom-color: var(--primary);
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .financial-metric {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        .form-control-professional {
+            border: 1.5px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+        
+        .form-control-professional:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+            outline: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -10px rgba(30, 64, 175, 0.4);
+        }
+        
+        /* Dashboard Corporativo */
+        .kpi-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary);
+        }
+        
+        .kpi-value {
+            font-size: 2rem;
+            font-weight: 700;
+            font-family: 'Source Sans Pro', sans-serif;
+            margin: 8px 0;
+        }
+        
+        .progress-bar-corporate {
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-bar-corporate-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            transition: width 0.6s ease;
+        }
+        
+        /* Tooltips Profissionais */
+        .corporate-tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .corporate-tooltip .tooltip-text {
+            visibility: hidden;
+            width: 300px;
+            background-color: var(--dark);
+            color: white;
+            text-align: left;
+            border-radius: 6px;
+            padding: 12px;
+            position: absolute;
+            z-index: 1000;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.85rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .corporate-tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* Modal Corporativo */
+        .corporate-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .corporate-modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlideIn 0.3s ease;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Gráficos Profissionais */
+        .chart-container-pro {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        /* Timeline de Progresso */
+        .timeline-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .timeline-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 16px;
+            top: 40px;
+            height: calc(100% + 20px);
+            width: 2px;
+            background: #e2e8f0;
+            z-index: 1;
+        }
+        
+        .step-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            z-index: 2;
+            font-weight: 600;
+            color: #64748b;
+        }
+        
+        .step-icon.completed {
+            background: var(--success);
+            color: white;
+        }
+        
+        .step-icon.active {
+            background: var(--primary);
+            color: white;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50">
+    
+    <!-- WhatsApp Flutuante -->
+    <a href="https://wa.me/5521991577383?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20os%20serviços%20da%20Brayan%20Contabilidade%20para%20MEI." 
+       class="fixed bottom-6 right-6 bg-green-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:bg-green-700 transition-all z-50 hover:scale-110"
+       target="_blank"
+       title="Consultoria via WhatsApp">
+        <i class="fab fa-whatsapp text-2xl"></i>
+    </a>
+    
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="fixed top-6 right-6 z-50 space-y-3"></div>
+    
+    <!-- Header Corporativo -->
+    <header class="bg-gradient-to-r from-blue-900 to-blue-800 text-white shadow-lg">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                    <div class="bg-white/10 p-3 rounded-xl backdrop-blur-sm">
+                        <i class="fas fa-calculator text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold font-heading">Calculadora MEI Pro</h1>
+                        <p class="text-blue-200 text-sm">Ferramenta exclusiva da <span class="font-bold">Brayan Contabilidade</span></p>
+                    </div>
+                    <div class="corporate-badge hidden md:block">
+                        <i class="fas fa-certificate mr-2"></i> Contabilidade Especializada
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-3">
+                    <button onclick="toggleDarkMode()" class="bg-white/10 hover:bg-white/20 p-2 rounded-lg transition">
+                        <i id="darkModeIcon" class="fas fa-moon"></i>
+                    </button>
+                    <button onclick="saveProgress()" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg text-sm font-medium transition flex items-center">
+                        <i class="fas fa-save mr-2"></i>Salvar Progresso
+                    </button>
+                    <button onclick="gerarRelatorioCompleto()" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg text-sm font-medium transition flex items-center">
+                        <i class="fas fa-file-pdf mr-2"></i>Relatório
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Barra de Progresso -->
+    <div class="bg-white border-b border-gray-100 shadow-sm">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-center space-x-8 overflow-x-auto">
+                <div class="timeline-step">
+                    <div class="step-icon completed">
+                        <i class="fas fa-check text-xs"></i>
+                    </div>
+                    <div>
+                        <div class="text-sm font-medium">Dados da Empresa</div>
+                        <div class="text-xs text-gray-500">Informações básicas</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-step">
+                    <div class="step-icon active">
+                        2
+                    </div>
+                    <div>
+                        <div class="text-sm font-medium">Custos e Despesas</div>
+                        <div class="text-xs text-gray-500">Análise financeira</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-step">
+                    <div class="step-icon">
+                        3
+                    </div>
+                    <div>
+                        <div class="text-sm font-medium">Precificação</div>
+                        <div class="text-xs text-gray-500">Estratégias de preço</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-step">
+                    <div class="step-icon">
+                        4
+                    </div>
+                    <div>
+                        <div class="text-sm font-medium">Mercado</div>
+                        <div class="text-xs text-gray-500">Análise competitiva</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-step">
+                    <div class="step-icon">
+                        5
+                    </div>
+                    <div>
+                        <div class="text-sm font-medium">Resultados</div>
+                        <div class="text-xs text-gray-500">Relatório final</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Navegação por Tabs -->
+    <nav class="bg-white border-b border-gray-100">
+        <div class="container mx-auto px-6">
+            <div class="flex space-x-8 overflow-x-auto py-3">
+                <button onclick="openTab('dashboard')" 
+                        class="corporate-tab px-4 py-3 whitespace-nowrap flex items-center">
+                    <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                </button>
+                <button onclick="openTab('dados')" 
+                        class="corporate-tab px-4 py-3 whitespace-nowrap flex items-center">
+                    <i class="fas fa-building mr-2"></i>Empresa
+                </button>
+                <button onclick="openTab('custos')" 
+                        class="corporate-tab px-4 py-3 whitespace-nowrap flex items-center">
+                    <i class="fas fa-chart-pie mr-2"></i>Custos
+                </button>
+                <button onclick="openTab('precificacao')" 
+                        class="corporate-tab px-4 py-3 whitespace-nowrap flex items-center">
+                    <i class="fas fa-tag mr-2"></i>Precificação
+                </button>
+                <button onclick="openTab('mercado')" 
+                        class="corporate-tab px-4 py-3 whitespace-nowrap flex items-center">
+                    <i class="fas fa-chart-line mr-2"></i>Mercado
+                </button>
+                <button onclick="openTab('resultados')" 
+                        class="corporate-tab px-4 py-3 whitespace-nowrap flex items-center">
+                    <i class="fas fa-file-invoice-dollar mr-2"></i>Resultados
+                </button>
+                <button onclick="openTab('projecoes')" 
+                        class="corporate-tab px-4 py-3 whitespace-nowrap flex items-center">
+                    <i class="fas fa-project-diagram mr-2"></i>Projeções
+                </button>
+                <button onclick="openTab('relatorio')" 
+                        class="corporate-tab px-4 py-3 whitespace-nowrap flex items-center">
+                    <i class="fas fa-download mr-2"></i>Exportar
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Conteúdo Principal -->
+    <main class="container mx-auto px-6 py-8">
+        <div id="conteudoPrincipal">
+            <!-- Dashboard (será preenchido via JavaScript) -->
+        </div>
+    </main>
+    
+    <!-- Footer Corporativo -->
+    <footer class="bg-gray-900 text-white py-12 mt-12">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-600 p-2 rounded-lg mr-3">
+                            <i class="fas fa-balance-scale text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold font-heading">Brayan Contabilidade</h3>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">
+                        Especialistas em contabilidade para MEI. Oferecemos soluções completas para sua empresa.
+                    </p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4 font-heading">Contato</h4>
+                    <ul class="space-y-3">
+                        <li class="flex items-center">
+                            <i class="fas fa-phone text-blue-400 mr-3"></i>
+                            <span>(21) 99157-7383</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope text-blue-400 mr-3"></i>
+                            <span>contato@brayancontabilidade.com</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-clock text-blue-400 mr-3"></i>
+                            <span>Seg-Sex: 9h-18h</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4 font-heading">Serviços</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white">Abertura de MEI</a></li>
+                        <li><a href="#" class="hover:text-white">Declaração Anual</a></li>
+                        <li><a href="#" class="hover:text-white">Consultoria Financeira</a></li>
+                        <li><a href="#" class="hover:text-white">Planejamento Tributário</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4 font-heading">Legal</h4>
+                    <p class="text-gray-400 text-sm">
+                        Esta ferramenta fornece estimativas e não substitui consultoria contábil profissional. 
+                        Consulte sempre um especialista para decisões importantes.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500 text-sm">
+                <p>© 2024 Brayan Contabilidade • CNPJ: 00.000.000/0000-00 • Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Modal para Gráficos -->
+    <div id="modalGraficos" class="corporate-modal">
+        <div class="corporate-modal-content">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold font-heading" id="modalTitulo"></h3>
+                    <button onclick="fecharModal()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <div class="chart-container-pro h-96">
+                    <canvas id="modalCanvas"></canvas>
+                </div>
+                <div class="mt-6 flex justify-end">
+                    <button onclick="exportarGraficoParaImagem()" class="btn-primary mr-3">
+                        <i class="fas fa-download mr-2"></i>Exportar
+                    </button>
+                    <button onclick="fecharModal()" class="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg font-medium">
+                        Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scripts Modulares -->
+    <script src="js/utils.js"></script>
+    <script src="js/modulo-dados.js"></script>
+    <script src="js/modulo-custos.js"></script>
+    <script src="js/modulo-precificacao.js"></script>
+    <script src="js/modulo-mercado.js"></script>
+    <script src="js/modulo-resultados.js"></script>
+    <script src="js/modulo-graficos.js"></script>
+    <script src="js/modulo-projecoes.js"></script>
+    <script src="js/modulo-exportacao.js"></script>
+    <script src="js/app.js"></script>
+    
+    <script>
+        // Inicialização rápida para evitar erro
+        window.dadosNegocio = {
+            empresa: {},
+            produto: {},
+            custos: {},
+            precificacao: {},
+            mercado: {},
+            resultados: {},
+            projecoes: {},
+            recomendacoes: {}
+        };
+        
+        // Funções básicas enquanto carrega
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const icon = document.getElementById('darkModeIcon');
+            if (icon) {
+                icon.classList.toggle('fa-moon');
+                icon.classList.toggle('fa-sun');
+            }
+        }
+    </script>
+</body>
+</html>
