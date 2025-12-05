@@ -1,1 +1,502 @@
+/* contabilidade.css - Tema corporativo para contabilidade */
 
+/* Estilos específicos para o tema contábil */
+
+/* Dashboard Financeiro */
+.dashboard-financeiro {
+    background: linear-gradient(135deg, #f8fafc 0%, #e6f0fa 100%);
+}
+
+.kpi-financeiro {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border-left: 4px solid var(--cor-primaria);
+    position: relative;
+    overflow: hidden;
+}
+
+.kpi-financeiro::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--cor-primaria), var(--cor-secundaria));
+}
+
+.kpi-valor {
+    font-size: 2.5rem;
+    font-weight: 700;
+    font-family: var(--fonte-titulo);
+    color: var(--cor-primaria);
+    margin: 0.5rem 0;
+    line-height: 1;
+}
+
+.kpi-label {
+    font-size: 0.875rem;
+    color: var(--cor-texto-secundario);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+.kpi-variacao {
+    font-size: 0.875rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.kpi-variacao.positivo {
+    color: var(--cor-sucesso);
+}
+
+.kpi-variacao.negativo {
+    color: var(--cor-erro);
+}
+
+/* Tabelas Financeiras */
+.tabela-financeira {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--sombra);
+}
+
+.tabela-financeira thead {
+    background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-primaria-escura) 100%);
+    color: white;
+}
+
+.tabela-financeira th {
+    padding: 1rem 1.5rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.tabela-financeira tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.tabela-financeira tbody tr:hover {
+    background: #f9fafb;
+}
+
+.tabela-financeira td {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--cor-borda);
+    font-size: 0.95rem;
+}
+
+.tabela-financeira tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Cards de Análise */
+.card-analise {
+    border-top: 4px solid var(--cor-primaria);
+    position: relative;
+}
+
+.card-analise .card-icon {
+    position: absolute;
+    top: -20px;
+    right: 20px;
+    background: var(--cor-primaria);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+}
+
+/* Indicadores de Status */
+.status-indicator {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.status-ativo {
+    background: #d1fae5;
+    color: var(--cor-sucesso);
+}
+
+.status-inativo {
+    background: #fee2e2;
+    color: var(--cor-erro);
+}
+
+.status-pendente {
+    background: #fef3c7;
+    color: var(--cor-alerta);
+}
+
+/* Barra de Progresso Financeira */
+.progresso-financeiro {
+    height: 8px;
+    background: var(--cor-borda);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 0.5rem 0;
+}
+
+.progresso-financeiro-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--cor-primaria), var(--cor-secundaria));
+    transition: width 0.6s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.progresso-financeiro-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-image: linear-gradient(
+        -45deg,
+        rgba(255, 255, 255, 0.2) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.2) 50%,
+        rgba(255, 255, 255, 0.2) 75%,
+        transparent 75%,
+        transparent
+    );
+    background-size: 20px 20px;
+    animation: moveStripes 1s linear infinite;
+}
+
+@keyframes moveStripes {
+    0% { background-position: 0 0; }
+    100% { background-position: 20px 0; }
+}
+
+/* Badges de Contabilidade */
+.badge-contabil {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.badge-tributario {
+    background: #e0f2fe;
+    color: #0369a1;
+    border-left: 3px solid #0369a1;
+}
+
+.badge-fiscal {
+    background: #f0f9ff;
+    color: #0c4a6e;
+    border-left: 3px solid #0c4a6e;
+}
+
+.badge-financeiro {
+    background: #f0fdf4;
+    color: #166534;
+    border-left: 3px solid #166534;
+}
+
+/* Cards de Métricas */
+.metrica-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    border: 1px solid var(--cor-borda);
+    transition: all 0.3s ease;
+}
+
+.metrica-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.metrica-valor {
+    font-size: 2.5rem;
+    font-weight: 700;
+    font-family: var(--fonte-titulo);
+    margin: 0.5rem 0;
+    line-height: 1;
+}
+
+.metrica-valor.receita {
+    color: var(--cor-sucesso);
+}
+
+.metrica-valor.custo {
+    color: var(--cor-erro);
+}
+
+.metrica-valor.lucro {
+    color: var(--cor-primaria);
+}
+
+/* Timeline Financeira */
+.timeline-financeira {
+    position: relative;
+    padding-left: 2rem;
+}
+
+.timeline-financeira::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--cor-borda);
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 2rem;
+    padding-left: 1.5rem;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -0.5rem;
+    top: 0.5rem;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    background: var(--cor-primaria);
+    border: 3px solid white;
+    box-shadow: 0 0 0 3px var(--cor-primaria);
+}
+
+.timeline-data {
+    font-size: 0.875rem;
+    color: var(--cor-texto-secundario);
+    margin-bottom: 0.25rem;
+}
+
+.timeline-descricao {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.timeline-valor {
+    font-weight: 600;
+    color: var(--cor-primaria);
+}
+
+/* Modal Financeiro */
+.modal-financeiro {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+.modal-financeiro-content {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    animation: modalSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Alertas Financeiros */
+.alerta-financeiro {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.alerta-info {
+    background: #dbeafe;
+    border-left: 4px solid #3b82f6;
+    color: #1e40af;
+}
+
+.alerta-sucesso {
+    background: #d1fae5;
+    border-left: 4px solid #10b981;
+    color: #065f46;
+}
+
+.alerta-alerta {
+    background: #fef3c7;
+    border-left: 4px solid #f59e0b;
+    color: #92400e;
+}
+
+.alerta-erro {
+    background: #fee2e2;
+    border-left: 4px solid #ef4444;
+    color: #991b1b;
+}
+
+.alerta-icon {
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.alerta-conteudo {
+    flex: 1;
+}
+
+.alerta-titulo {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.alerta-mensagem {
+    font-size: 0.875rem;
+    opacity: 0.9;
+}
+
+/* Tooltips Financeiros */
+.tooltip-financeiro {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dashed var(--cor-texto-secundario);
+    cursor: help;
+}
+
+.tooltip-financeiro:hover .tooltip-texto {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.tooltip-texto {
+    visibility: hidden;
+    width: 280px;
+    background: var(--cor-primaria-escura);
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    border-radius: 8px;
+    position: absolute;
+    z-index: 1000;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.tooltip-texto::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: var(--cor-primaria-escura) transparent transparent transparent;
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(12, 1fr);
+}
+
+.dashboard-grid-col-4 {
+    grid-column: span 4;
+}
+
+.dashboard-grid-col-6 {
+    grid-column: span 6;
+}
+
+.dashboard-grid-col-8 {
+    grid-column: span 8;
+}
+
+.dashboard-grid-col-12 {
+    grid-column: span 12;
+}
+
+@media (max-width: 1024px) {
+    .dashboard-grid-col-4,
+    .dashboard-grid-col-6,
+    .dashboard-grid-col-8 {
+        grid-column: span 12;
+    }
+}
+
+/* Loader Financeiro */
+.loader-financeiro {
+    width: 50px;
+    height: 50px;
+    border: 3px solid var(--cor-borda);
+    border-top-color: var(--cor-primaria);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 2rem auto;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Empty States */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--cor-texto-secundario);
+}
+
+.empty-state-icon {
+    font-size: 3rem;
+    color: var(--cor-borda);
+    margin-bottom: 1rem;
+}
+
+.empty-state-titulo {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--cor-texto);
+}
+
+.empty-state-descricao {
+    max-width: 400px;
+    margin: 0 auto 1.5rem;
+}
